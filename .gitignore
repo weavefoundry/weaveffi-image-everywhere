@@ -1,0 +1,56 @@
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock.bak
+
+# WeaveFFI orchestrator
+sdk/weaveffi.lock
+
+# Per-language build artifacts (generated SDK source IS committed)
+demos/node/node_modules/
+demos/python/__pycache__/
+demos/python/*.pyc
+demos/python/.venv/
+demos/csharp/bin/
+demos/csharp/obj/
+demos/dart/.dart_tool/
+demos/dart/pubspec.lock
+demos/dart/build/
+demos/swift/.build/
+demos/swift/Package.resolved
+demos/kotlin/build/
+demos/kotlin/*.jar
+demos/c/build/
+demos/c/demo
+demos/cpp/build/
+demos/cpp/demo
+demos/wasm/pkg/
+demos/kotlin/.deps/
+demos/kotlin/.build/
+demos/node/build/
+demos/node/index.node
+sdk/node/build/
+sdk/node/index.node
+sdk/node/node_modules/
+sdk/node/package-lock.json
+
+# WeaveFFI generator's per-target hash cache (regenerated each `generate`)
+sdk/.weaveffi-cache/
+
+# Demo outputs (regenerated each run)
+demos/*/output.png
+.verify-tmp/
+verify-results.json
+
+# Fetched test asset (re-fetched on demand by scripts/fetch-asset.sh)
+assets/input.jpg
+assets/input.jpg.sha256
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp

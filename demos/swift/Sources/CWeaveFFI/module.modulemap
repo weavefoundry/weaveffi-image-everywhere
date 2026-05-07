@@ -1,0 +1,5 @@
+module CWeaveFFI [system] {
+    header "shim.h"
+    link "weaveffi"
+    export *
+}

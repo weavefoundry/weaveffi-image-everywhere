@@ -1,0 +1,102 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/weavefoundry/weaveffi/main/weaveffi.schema.json
+version: "0.3.0"
+modules:
+  - name: image
+    enums:
+      - name: ImageFormat
+        doc: Encoded image container.
+        variants:
+          - { name: Png,  value: 0 }
+          - { name: Jpeg, value: 1 }
+          - { name: Webp, value: 2 }
+          - { name: Gif,  value: 3 }
+      - name: OpKind
+        doc: Operation discriminator. See Operation for which fields each kind requires.
+        variants:
+          - { name: Resize,    value: 0 }
+          - { name: Crop,      value: 1 }
+          - { name: Rotate,    value: 2 }
+          - { name: Blur,      value: 3 }
+          - { name: Grayscale, value: 4 }
+    structs:
+      - name: Operation
+        doc: |
+          Single image operation. Build with the resize/crop/rotate/blur/grayscale
+          factory functions; pass a list to process(). Fields used per kind:
+            Resize    : width, height
+            Crop      : x, y, width, height
+            Rotate    : degrees (clockwise, in degrees)
+            Blur      : sigma   (Gaussian sigma, in pixels)
+            Grayscale : (none)
+          Unused fields are null.
+        fields:
+          - { name: kind,    type: OpKind }
+          - { name: width,   type: "u32?" }
+          - { name: height,  type: "u32?" }
+          - { name: x,       type: "u32?" }
+          - { name: y,       type: "u32?" }
+          - { name: degrees, type: "f64?" }
+          - { name: sigma,   type: "f64?" }
+      - name: ImageInfo
+        doc: Decoded image header information.
+        fields:
+          - { name: width,  type: u32 }
+          - { name: height, type: u32 }
+          - { name: format, type: ImageFormat }
+    functions:
+      - name: resize
+        doc: Build a Resize operation.
+        params:
+          - { name: width,  type: u32 }
+          - { name: height, type: u32 }
+        return: Operation
+      - name: crop
+        doc: Build a Crop operation (x,y is the top-left corner).
+        params:
+          - { name: x,      type: u32 }
+          - { name: y,      type: u32 }
+          - { name: width,  type: u32 }
+          - { name: height, type: u32 }
+        return: Operation
+      - name: rotate
+        doc: Build a Rotate operation (degrees clockwise).
+        params:
+          - { name: degrees, type: f64 }
+        return: Operation
+      - name: blur
+        doc: Build a Gaussian Blur operation (sigma in pixels).
+        params:
+          - { name: sigma, type: f64 }
+        return: Operation
+      - name: grayscale
+        doc: Build a Grayscale operation.
+        params: []
+        return: Operation
+      - name: process
+        doc: Apply ops in order, encode in out_format, return bytes.
+        params:
+          - { name: input,      type: bytes }
+          - { name: ops,        type: "[Operation]" }
+          - { name: out_format, type: ImageFormat }
+        return: bytes
+      - name: probe
+        doc: Decode the header only and return dimensions plus detected format.
+        params:
+          - { name: input, type: bytes }
+        return: ImageInfo
+generators:
+  weaveffi:
+    strip_module_prefix: true
+  ruby:
+    module_name: WeaveImage
+    gem_name: weave-image
+  cpp:
+    namespace: weave_image
+  go:
+    module_path: github.com/weavefoundry/weaveffi-image-everywhere/sdk/go
+  dotnet:
+    namespace: WeaveImage
+  swift:
+    module_name: WeaveImage
+  dart:
+    package_name: weave_image

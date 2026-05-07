@@ -1,0 +1,17 @@
+[package]
+name = "weaveffi-image"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pure-Rust image processing facade with a stable C ABI; consumed by 11 generated WeaveFFI SDKs."
+
+[lib]
+# Name the produced shared library `libweaveffi.{dylib,so,dll}` so it
+# matches the generator's default loader expectation
+# (`lib{c_prefix}.{ext}` with the default c_prefix of "weaveffi").
+name = "weaveffi"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+weaveffi-abi = "0.4"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif"] }
